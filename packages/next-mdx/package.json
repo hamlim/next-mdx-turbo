@@ -12,16 +12,12 @@
     "url": "https://github.com/hamlim/next-mdx-turbo",
     "directory": "packages/next-mdx"
   },
-  "main": "./dist/es/index.js",
+  "main": "./dist/index.js",
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/es/index.d.ts",
-        "default": "./dist/es/index.js"
-      },
-      "require": {
-        "types": "./dist/cjs/index.d.cts",
-        "default": "./dist/cjs/index.cjs"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       }
     },
     "./loader": "./loader.cjs"
@@ -51,7 +47,9 @@
     "xxbuild": "bunchee",
     "xxxbuild": "esbuild ./src/index.ts --bundle --platform=node --target=node22 --outdir=./dist",
     "ybuild": "hohoro",
-    "build": "bun ./build.mjs",
+    "yybuild": "bun ./build.mjs",
+    "build": "hohoro-experimental",
+    "dev": "node --watch-path=./src dev.mjs",
     "type-check": "tsc -p ./tsconfig.json",
     "lint": "biome lint ./src/",
     "test": "bun test",

@@ -1,9 +1,21 @@
-import Testing from "./testing.mdx";
+import { mdxTransformer } from "@hamstack/next-mdx";
+import { useMDXComponents } from "~/mdx-components";
+import mdxContext from "./testing.mdx";
 
-export default function Home() {
+// let pendingMDX = fetch("./testing.mdx").then((r) => r.text());
+export default async function Home() {
+  // let mdxContext = await pendingMDX;
+
+  const { Component, frontmatter } = await mdxTransformer({
+    code: mdxContext,
+    useMDXComponents,
+  });
+
+  console.log(frontmatter);
+
   return (
     <main>
-      <Testing />
+      <Component />
     </main>
   );
 }

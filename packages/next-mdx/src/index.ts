@@ -1,26 +1,58 @@
-import { Buffer } from "node:buffer";
-import { compile } from "@mdx-js/mdx";
+import { evaluate } from "@mdx-js/mdx";
+import { Fragment } from "react";
+import * as jsxRuntime from "react/jsx-runtime";
 import rehypeMdxCodeProps from "rehype-mdx-code-props";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkGfm from "remark-gfm";
 import { remarkMdxFrontmatter } from "remark-mdx-frontmatter";
 
-export default async function loader(code: string): Promise<void> {
-  // @ts-expect-error
-  let callback = this.async();
-  // @ts-expect-error
-  let options = this.getOptions();
+// export default async function loader(code: string): Promise<void> {
+//   // @ts-expect-error
+//   let callback = this.async();
+//   // @ts-expect-error
+//   let options = this.getOptions();
 
-  let result = await compile(code, {
+//   let result = await compile(code, {
+//     remarkPlugins: [remarkGfm, remarkFrontmatter, remarkMdxFrontmatter],
+//     rehypePlugins: [rehypeMdxCodeProps],
+//     providerImportSource: options.providerImportSource,
+//   });
+
+//   callback(
+//     undefined,
+//     Buffer.from(result.value),
+//     result.map || undefined,
+//     undefined,
+//   );
+// }
+
+type Options = {
+  code: string;
+  useMDXComponents: () => Record<string, React.ComponentType>;
+};
+
+type Result = {
+  Component: React.ComponentType;
+  frontmatter: Record<string, unknown>;
+};
+
+export async function mdxTransformer({
+  code,
+  useMDXComponents,
+}: Options): Promise<Result> {
+  let result = await evaluate(code, {
     remarkPlugins: [remarkGfm, remarkFrontmatter, remarkMdxFrontmatter],
     rehypePlugins: [rehypeMdxCodeProps],
-    providerImportSource: options.providerImportSource,
+    Fragment,
+    useMDXComponents,
+    jsx: jsxRuntime.jsx,
+    jsxs: jsxRuntime.jsxs,
+    // @ts-expect-error
+    jsxDEV: jsxRuntime.jsxDEV,
   });
 
-  callback(
-    undefined,
-    Buffer.from(result.value),
-    result.map || undefined,
-    undefined,
-  );
+  return {
+    Component: result.default,
+    frontmatter: result.frontmatter ?? {},
+  } as Result;
 }

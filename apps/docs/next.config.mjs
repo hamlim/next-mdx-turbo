@@ -30,6 +30,7 @@ const nextConfig = {
     },
   },
   webpack(config) {
+    config.stats = "verbose";
     config.module.rules.push({
       test: /\.mdx/,
       use: [

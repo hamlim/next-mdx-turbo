@@ -1,3 +1,4 @@
+import { Buffer } from "node:buffer";
 import { compile } from "@mdx-js/mdx";
 import rehypeMdxCodeProps from "rehype-mdx-code-props";
 import remarkFrontmatter from "remark-frontmatter";
@@ -6,7 +7,11 @@ import { remarkMdxFrontmatter } from "remark-mdx-frontmatter";
 
 export default async function loader(
   code: string,
-  callback: (error?: Error, result?: string) => void,
+  callback: (
+    error?: Error,
+    result?: string | Buffer,
+    sourceMap?: unknown,
+  ) => void,
   options: {
     providerImportSource: string;
   },
@@ -17,6 +22,6 @@ export default async function loader(
     providerImportSource: options.providerImportSource,
   });
 
-  callback(undefined, result.value.toString());
+  callback(undefined, Buffer.from(result.value), result.map || undefined);
   return;
 }

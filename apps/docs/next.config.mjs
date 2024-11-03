@@ -29,6 +29,21 @@ const nextConfig = {
       ],
     },
   },
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.mdx/,
+      use: [
+        {
+          loader: "@hamstack/next-mdx/loader",
+          options: {
+            providerImportSource: "~/use-mdx-components",
+          },
+        },
+      ],
+    });
+
+    return config;
+  },
 };
 
 export default nextConfig;

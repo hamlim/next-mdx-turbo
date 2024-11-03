@@ -1,14 +1,55 @@
-# `pkg-a`
+# `@hamstack/next-mdx`
 
-TODO
+A turbopack compatible MDX loader that works with both webpack and turbopack!
 
 ## Getting Started:
 
-```bash
-bun add pkg-a
+```sh
+bun add @hamstack/next-mdx
 ```
 
-...
+Also make sure to install the peer dependencies:
+
+```sh
+bun add @mdx-js/mdx@3.1.0 remark-gfm@4.0.0 remark-frontmatter@5.0.0 remark-mdx-frontmatter@1.0.0 rehype-mdx-code-props@3.0.1
+```
+
+Then add the following to your `next.config`:
+
+```ts
+export default {
+  experimental: {
+    turbo: {
+      rules: {
+        "*.mdx": {
+          loaders: [
+            {
+              loader: "@hamstack/next-mdx/loader",
+              options: {
+                // Must be provided
+                // Any resolvable path to a file that provides
+                // a named export of `useMDXComponents`
+                // e.g. export function useMDXComponents(): Record<string, ComponentLike>
+                providerImportSource: "~/use-mdx-components",
+              },
+            },
+          ],
+          as: "*.js",
+        },
+      },
+      resolveExtensions: [
+        ".mdx",
+        ".tsx",
+        ".ts",
+        ".jsx",
+        ".js",
+        ".mjs",
+        ".json",
+      ],
+    },
+  }
+}
+```
 
 ## Contributing:
 

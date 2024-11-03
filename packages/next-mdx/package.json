@@ -12,11 +12,17 @@
     "url": "https://github.com/hamlim/next-mdx-turbo",
     "directory": "packages/next-mdx"
   },
-  "main": "./dist/index.js",
+  "main": "./dist/es/index.js",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "import": {
+        "types": "./dist/es/index.d.ts",
+        "default": "./dist/es/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.cts",
+        "default": "./dist/cjs/index.cjs"
+      }
     },
     "./loader": "./loader.cjs"
   },
@@ -26,7 +32,8 @@
     "@swc/core": "1.4.2",
     "hohoro": "0.3.0",
     "@types/bun": "1.1.11",
-    "typescript": "5.4.5"
+    "typescript": "5.4.5",
+    "bunchee": "5.5.1"
   },
   "peerDependencies": {
     "@mdx-js/mdx": "^3.1.0",
@@ -36,12 +43,17 @@
     "rehype-mdx-code-props": "^3.0.0"
   },
   "scripts": {
-    "dev": "node --watch-path=./src dev.mjs",
-    "build": "hohoro-experimental",
+    "xdev": "node --watch-path=./src dev.mjs",
+    "dev": "bunchee -w",
+    "xbuild": "hohoro",
+    "build": "bunchee",
     "type-check": "tsc -p ./tsconfig.json",
     "lint": "biome lint ./src/",
     "test": "bun test",
     "prepub": "bun run build && bun run type-check && bun run lint && bun run test",
     "pub": "npm publish --access public"
-  }
+  },
+  "xfiles": ["dist"],
+  "module": "./dist/es/index.js",
+  "types": "./dist/es/index.d.ts"
 }

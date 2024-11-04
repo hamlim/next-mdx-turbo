@@ -12,15 +12,14 @@ type Options = {
   useMDXComponents: () => Record<string, React.ComponentType>;
 };
 
-type Result = {
+type Result<FrontMatter extends Record<string, unknown>> = {
   Component: React.ComponentType;
-  frontmatter: Record<string, unknown>;
+  frontmatter: FrontMatter;
 };
 
-export async function transformMDX({
-  content,
-  useMDXComponents,
-}: Options): Promise<Result> {
+export async function transformMDX<
+  FrontMatter extends Record<string, unknown>,
+>({ content, useMDXComponents }: Options): Promise<Result<FrontMatter>> {
   let result = await evaluate(content, {
     remarkPlugins: [
       remarkFrontmatter,
@@ -39,14 +38,5 @@ export async function transformMDX({
   return {
     Component: result.default,
     frontmatter: result.frontmatter ?? {},
-  } as Result;
-}
-
-export async function loadMDX(path: string): Promise<string> {
-  let baseUrl =
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:3000"
-      : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
-
-  return fetch(`${baseUrl}/${path}`).then((r) => r.text());
+  } as Result<FrontMatter>;
 }

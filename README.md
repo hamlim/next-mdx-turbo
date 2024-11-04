@@ -1,26 +1,12 @@
-# Template monorepo
+# Next MDX Turbo
 
-This is a template repo in GitHub for creating a fresh monorepo for managing code and documentation.
+This repo is a bit of an experiment to figure out how to get MDX working well with Next 15 (using `turbopack` for development), while also supporting both remark and rehype plugins (since the current rust-based mdx compiler doesn't support those).
 
-For more details on this setup, refer to my blog post here: https://matthamlin.me/2024/february/library-docs-monorepo-template
+I had originally attempted to write a custom webpack loader that should have worked in development with turbopack and in production builds with webpack - however I kept running into quirks where the build process will just exit without any additional context.
 
-## Getting Started:
+TL;DR:
 
-You can get started using this template in 2 ways:
-
-1. via `degit`:
-
-```sh
-bunx --bun degit hamlim/template-monorepo <name-of-your-repo>
-```
-
-2. via GitHub:
-
-- Use this template (see `Use this Template` button near the top right corner of the page)
-- Clone the newly created repo
-
-Once you have a repo setup - you can then install dependencies via `bun install` (if you don't have bun installed locally, refer to their [docs](https://bun.sh)).
-
+This repo sets up a minimal library that wraps `evaluate` from `@mdx-js/mdx` for use at **runtime** vs _build time_.
 
 ---
 

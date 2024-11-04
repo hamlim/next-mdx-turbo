@@ -1,13 +1,16 @@
-import { mdxTransformer } from "@hamstack/next-mdx";
+import { loadMDX, transformMDX } from "@hamstack/next-mdx";
 import { useMDXComponents } from "~/mdx-components";
-import mdxContext from "./testing.mdx";
 
-// let pendingMDX = fetch("./testing.mdx").then((r) => r.text());
+// preload the mdx file:
+let pendingMDX = loadMDX("testing.mdx");
+
 export default async function Home() {
-  // let mdxContext = await pendingMDX;
+  // resolve it:
+  let mdxContext = await pendingMDX;
 
-  const { Component, frontmatter } = await mdxTransformer({
-    code: mdxContext,
+  // transform it:
+  const { Component, frontmatter } = await transformMDX({
+    content: mdxContext,
     useMDXComponents,
   });
 
